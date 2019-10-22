@@ -20,28 +20,25 @@ import java.util.List;
 @RequestMapping("/facade/api")
 public class ConfigFacadeApi {
 
-    @RequestMapping("/config/{appName}/{env}")
-    public RepeaterResult<RepeaterConfig> getConfig(@PathVariable("appName") String appName,
-                                                    @PathVariable("env") String env) {
-        // 自己存配置；目前直接Mock了一份
-        RepeaterConfig config = new RepeaterConfig();
-        List<Behavior> behaviors = Lists.newArrayList();
-        config.setPluginIdentities(Lists.newArrayList("http", "java-entrance", "java-subInvoke", "mybatis", "ibatis"));
-        // 回放器
-        config.setRepeatIdentities(Lists.newArrayList("java", "http"));
-        // 白名单列表
-        config.setHttpEntrancePatterns(Lists.newArrayList("^/regress/.*$"));
-        // java入口方法
-        behaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegress"));
-        config.setJavaEntranceBehaviors(behaviors);
-        List<Behavior> subBehaviors = Lists.newArrayList();
-        // java调用插件
-        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegressInner"));
-        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "findPartner"));
-        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "slogan"));
-        config.setJavaSubInvokeBehaviors(subBehaviors);
-        config.setUseTtl(true);
-        return RepeaterResult.builder().success(true).message("operate success").data(config).build();
-    }
+	@RequestMapping("/config/{appName}/{env}")
+	public RepeaterResult<RepeaterConfig> getConfig(@PathVariable("appName") String appName,
+	                                                @PathVariable("env") String env) {
+	    // 改为了可以适用于 gs-rest-service 的配置
+	    RepeaterConfig config = new RepeaterConfig();
+	    List<Behavior> behaviors = Lists.newArrayList();
+	    config.setPluginIdentities(Lists.newArrayList("http", "java-entrance", "java-subInvoke", "mybatis", "ibatis"));
+	    // 回放器
+	    config.setRepeatIdentities(Lists.newArrayList("java", "http"));
+	    // 白名单列表
+	    config.setHttpEntrancePatterns(Lists.newArrayList("^/greeting.*$"));
+	    // java入口方法
+	    behaviors.add(new Behavior("hello.GreetingController", "greeting"));
+	    config.setJavaEntranceBehaviors(behaviors);
+	    List<Behavior> subBehaviors = Lists.newArrayList();
+	    // java调用插件
+	    config.setJavaSubInvokeBehaviors(subBehaviors);
+	    config.setUseTtl(true);
+	    return RepeaterResult.builder().success(true).message("operate success").data(config).build();
+	}
 
 }
