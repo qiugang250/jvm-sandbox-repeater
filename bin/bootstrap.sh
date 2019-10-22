@@ -3,6 +3,8 @@
 # exit shell with err_code
 # $1 : err_code
 # $2 : err_msg
+
+git pull
 exit_on_err()
 {
     [[ ! -z "${2}" ]] && echo "${2}" 1>&2
