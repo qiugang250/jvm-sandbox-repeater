@@ -43,6 +43,6 @@ public class RepeaterBridge {
      * @return 回放器
      */
     public Repeater select(InvokeType type) {
-        return cached.get(type).name();
+        return cached.get(type.name());
     }
 }
